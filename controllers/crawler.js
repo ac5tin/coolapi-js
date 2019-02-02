@@ -76,8 +76,8 @@ const crawlerPromise = (options,type)=>(
     })
 )
 
-const singlePageData = async uri=>{
-    return await crawlerPromise({uri:uri},'body')
+const singlePageData = async (uri,selector)=>{
+    return await crawlerPromise({uri:uri},selector)
         .then(res=>(res))
         .catch(err=>console.log(err));
 }
@@ -133,7 +133,8 @@ module.exports = {
         if(req.query.url){
             try{
                 const url = req.query.url;
-                res.status(200).send(await singlePageData(url));
+                const selector = req.query.selector || 'body'
+                res.status(200).send(await singlePageData(url,selector));
             }catch(e){return res.status(400).send({'error':'could not fetch data from url'})}
             
         }else{
